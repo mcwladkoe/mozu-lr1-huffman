@@ -12,7 +12,21 @@ class H:
     def __gt__(self, other):
         if not isinstance(other, H):
             return super(H, self).__gt__(other)
-        return self.F < other.F
+        return self.F > other.F
+
+    def print(self):
+        """Print nodes table."""
+        left_char = self.L.visible_char if self.L else '-'
+        right_char = self.R.visible_char if self.R else '-'
+        print('\t'.join([self.visible_char, str(self.F), left_char, right_char]))
+        if self.L:
+            self.L.print()
+        if self.R:
+            self.R.print()
+
+    @property
+    def visible_char(self):
+        return self.C or '???'
 
 
 class HuffmanNode:

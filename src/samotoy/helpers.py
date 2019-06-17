@@ -31,6 +31,7 @@ def build_tree(nodes):
 
 def get_frequency_table(long_str):
     ftable = defaultdict(int)
+    print(type(long_str))
     for c in long_str:
         ftable[c] += 1
     return ftable

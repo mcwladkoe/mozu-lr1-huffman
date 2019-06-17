@@ -17,5 +17,6 @@ menu3_string = """
 --- МЕНЮ ---
 0 - pickle + pickle
 1 - pickle + marshal
-2 - выход в предыдущее меню
+2 - json + marshal
+3 - выход в предыдущее меню
 """

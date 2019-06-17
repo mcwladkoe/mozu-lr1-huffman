@@ -27,7 +27,7 @@ def main():
                 elif menu1 == 0:
                     long_str = input("Введите строку: ")
                 elif menu1 == 1:
-                    filename = 'world95.txt'
+                    # filename = 'world95.txt'
                     filename = '101.EXE'
                     # filename = input("Введите имя файла: ")
                 break
@@ -50,9 +50,9 @@ def main():
                     except ValueError:
                         print("Неверный мод")
                         continue
-                    if menu3 not in range(3):
+                    if menu3 not in range(4):
                         print("Неверный мод")
-                    elif menu3 == 2:
+                    elif menu3 == 3:
                         break
                     else:
                         enc = Encoder(
@@ -61,13 +61,17 @@ def main():
                             serialize_mode=menu3,
                             long_str=long_str
                         )
-                        enc.write('test.txt')
+                        out_filename = '{}_encoded.mcwladkoe'.format(filename or 'temp')
+                        enc.write(out_filename)
+                        dec = Decoder(
+                            filename=out_filename,
+                            encode_mode=menu2,
+                            serialize_mode=menu3
+                        )
+                        out2_filename = '{}_decoded.mcwladkoe'.format(filename or 'temp')
+                        dec.decode_as(out2_filename)
                         break
     sys.exit()
-    enc = Encoder('raw.txt')
-    enc.write('test.txt')
-    dec = Decoder('test.txt')
-    dec.decode_as('test2.txt')
 
 
 if __name__ == '__main__':

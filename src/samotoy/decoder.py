@@ -28,7 +28,7 @@ class Decoder(object):
         self.array_codes = array.array('B', array_codes)
 
     def _decode(self):
-        string_buf = []
+        string_buf = array.array('B')
         total_length = 0
         node = self.root
         for code in self.array_codes:
@@ -38,16 +38,16 @@ class Decoder(object):
                 total_length += 1
                 if code >> (MAX_BITS - buf_length) & 1:
                     node = node.R
-                    if node.C:
+                    if node.C is not None:
                         string_buf.append(node.C)
                         node = self.root
                 else:
                     node = node.L
-                    if node.C:
+                    if node.C is not None:
                         string_buf.append(node.C)
                         node = self.root
 
-        return ''.join(string_buf)
+        return string_buf
 
     def read(self, filename):
         fp = open(filename, 'rb')
@@ -59,6 +59,6 @@ class Decoder(object):
 
     def decode_as(self, filename):
         decoded = self._decode()
-        fout = open(filename, 'w')
+        fout = open(filename, 'wb')
         fout.write(decoded)
         fout.close()
