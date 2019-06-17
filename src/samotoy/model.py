@@ -1,3 +1,5 @@
+import json
+
 
 class H:
     def __init__(self, char=None, frequency=None, left_node=None, right_node=None, print_char=None):
@@ -27,6 +29,73 @@ class H:
     @property
     def visible_char(self):
         return self.C or '???'
+
+
+class HSerializer:
+    def __init__(self, serializer=None):
+        self.serializer = serializer or json
+
+    def recursive_dumps(self, obj):
+        if not obj:
+            return None
+        data = [obj.C, self.recursive_dumps(obj.R)]
+        if obj.L:
+            data.append(self.recursive_dumps(obj.L))
+        return data
+
+    def recursive_loads(self, obj):
+        if not obj:
+            return
+        ob = H()
+        ob.C = obj[0]
+        ob.R = self.recursive_loads(obj[1])
+        if len(obj) > 2:
+            ob.L = self.recursive_loads(obj[2])
+        return ob
+
+    def loads(self, raw):
+        obj = self.serializer.loads(raw)
+        return self.recursive_loads(obj)
+
+    def dumps(self, obj):
+        data = self.recursive_dumps(obj)
+        return self.serializer.dumps(data)
+
+
+class HDictSerializer:
+    @classmethod
+    def recursive_dumps(cls, obj):
+        data = {
+            'C': obj.C
+        }
+        if obj.R:
+            data['R'] = cls.recursive_dumps(obj.R)
+        if obj.L:
+            data['L'] = cls.recursive_dumps(obj.L)
+        return data
+
+    @classmethod
+    def dumps(cls, obj):
+        data = cls.recursive_dumps(obj)
+        return json.dumps(data)
+
+
+class HFullSerializer:
+    @classmethod
+    def recursive_dumps(cls, obj):
+        data = {
+            'C': obj.C
+        }
+        if obj.R:
+            data['R'] = cls.recursive_dumps(obj.R)
+        if obj.L:
+            data['L'] = cls.recursive_dumps(obj.L)
+        return data
+
+    @classmethod
+    def dumps(cls, obj):
+        data = recursive_dumps(obj)
+        return json.dumps(data)
 
 
 class HuffmanNode:

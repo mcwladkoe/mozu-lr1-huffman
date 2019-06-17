@@ -4,6 +4,7 @@ import sys
 from .encoder import Encoder
 from .decoder import Decoder
 from .menu_strings import *
+from .serialize_modes import serialize_modes_extended, serialize_modes
 
 
 def main():
@@ -27,9 +28,7 @@ def main():
                 elif menu1 == 0:
                     long_str = input("Введите строку: ")
                 elif menu1 == 1:
-                    # filename = 'world95.txt'
-                    filename = '101.EXE'
-                    # filename = input("Введите имя файла: ")
+                    filename = input("Введите имя файла: ")
                 break
         print(menu2_string)
         while True:
@@ -40,7 +39,7 @@ def main():
                 continue
             if menu2 not in range(3):
                 print("Неверный мод")
-            elif menu2 == 2:
+            elif menu2 == 0:
                 break
             else:
                 print(menu3_string)
@@ -50,10 +49,27 @@ def main():
                     except ValueError:
                         print("Неверный мод")
                         continue
-                    if menu3 not in range(4):
+                    if menu3 not in serialize_modes_extended.keys():
                         print("Неверный мод")
-                    elif menu3 == 3:
+                    elif menu3 == 0:
                         break
+                    elif menu3 == 100:
+                        for i in serialize_modes.keys():
+                            enc = Encoder(
+                                filename=filename,
+                                encode_mode=menu2,
+                                serialize_mode=i,
+                                long_str=long_str
+                            )
+                            out_filename = '{}_{}_encoded.mcwladkoe'.format(i, filename or 'temp')
+                            enc.write(out_filename)
+                            dec = Decoder(
+                                filename=out_filename,
+                                encode_mode=menu2,
+                                serialize_mode=i
+                            )
+                            out2_filename = '{}_{}_decoded.mcwladkoe'.format(i, filename or 'temp')
+                            dec.decode_as(out2_filename)
                     else:
                         enc = Encoder(
                             filename=filename,

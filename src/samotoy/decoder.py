@@ -1,9 +1,8 @@
 import os
 import array
-import marshal
-import pickle
 
 from .helpers import MAX_BITS
+from .serialize_modes import serialize_modes
 
 
 class Decoder(object):
@@ -12,18 +11,25 @@ class Decoder(object):
         self.serialize_mode = serialize_mode or 0
         if filename and os.path.exists(filename):
             with open(filename, 'rb') as f:
-                self.parse_data(*marshal.load(f))
+                self.parse_data(f.read())
         elif filename:
-            print('File {} does not exists'.format(filename))
+            print('Файл {} не найден'.format(filename))
             raise NotImplementedError()
         elif raw_str:
-            self.parse_data(*marshal.loads(raw_str))
+            self.parse_data(raw_str)
         else:
-            print('Please specify params.')
+            print('Выберите хотябы 1 параметр.')
             raise NotImplementedError()
 
-    def parse_data(self, data, length, array_codes):
-        self.root = pickle.loads(data)
+    def parse_data(self, raw_data):
+        serializer = serialize_modes.get(self.serialize_mode)
+        if not serializer:
+            raise NotImplementedError()
+
+        lib1 = serializer['lib1']
+        lib2 = serializer['lib2']
+        data, length, array_codes = lib2.loads(raw_data)
+        self.root = lib1.loads(data)
         self.code_length = length
         self.array_codes = array.array('B', array_codes)
 
@@ -49,16 +55,7 @@ class Decoder(object):
 
         return string_buf
 
-    def read(self, filename):
-        fp = open(filename, 'rb')
-        unpickled_root, length, array_codes = marshal.load(fp)
-        self.root = pickle.loads(unpickled_root)
-        self.code_length = length
-        self.array_codes = array.array('B', array_codes)
-        fp.close()
-
     def decode_as(self, filename):
         decoded = self._decode()
-        fout = open(filename, 'wb')
-        fout.write(decoded)
-        fout.close()
+        with open(filename, 'wb') as f:
+            f.write(decoded)

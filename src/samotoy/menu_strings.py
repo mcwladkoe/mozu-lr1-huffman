@@ -1,3 +1,5 @@
+from .serialize_modes import serialize_modes_extended
+
 menu1_string = """
 --- МЕНЮ ---
 0 - ввести строку с клавиатуры
@@ -8,15 +10,15 @@ menu1_string = """
 
 menu2_string = """
 --- МЕНЮ ---
-0 - хранить как битовый массив(array)
-1 - хранить как строку
-2 - выход в предыдущее меню
+1 - хранить как битовый массив(array)
+2 - хранить как строку
+0 - выход в предыдущее меню
 """
 
 menu3_string = """
 --- МЕНЮ ---
-0 - pickle + pickle
-1 - pickle + marshal
-2 - json + marshal
-3 - выход в предыдущее меню
+"""
+for key, val in serialize_modes_extended.items():
+    menu3_string += '{} - {}\n'.format(key, val)
+menu3_string += """0 - выход в предыдущее меню
 """

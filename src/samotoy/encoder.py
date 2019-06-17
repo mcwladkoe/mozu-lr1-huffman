@@ -1,10 +1,8 @@
 import os
 import array
-import marshal
-import pickle
-import json
 
 from .model import H
+from .serialize_modes import serialize_modes
 from .helpers import (
     build_tree,
     get_frequency_table,
@@ -28,15 +26,16 @@ class Encoder(object):
         self._long_str = ''
         self.encode_mode = encode_mode or 0
         self.serialize_mode = serialize_mode or 0
+        self.filename = filename
         if filename and os.path.exists(filename):
             with open(filename, 'rb') as f:
                 self.long_str = f.read()
         elif filename:
-            print('File {} does not exists'.format(filename))
+            print('Файл {} не найден'.format(filename))
         elif long_str:
             self.long_str = long_str
         else:
-            print('Please specify params.')
+            print('Выберите хотябы 1 параметр.')
 
     @property
     def long_str(self):
@@ -48,9 +47,9 @@ class Encoder(object):
         if s:
             self.root = self._get_tree_root()
             self.code_map = self._get_code_map()
-            if self.encode_mode == 0:
+            if self.encode_mode == 1:
                 encode_func = self._encode_as_bytes
-            elif self.encode_mode == 1:
+            elif self.encode_mode == 2:
                 encode_func = self._encode_as_string
             self.array_codes, self.code_length = encode_func()
 
@@ -94,20 +93,22 @@ class Encoder(object):
     def write(self, filename):
         if self._long_str:
             fcompressed = open(filename, 'wb')
-            if self.serialize_mode == 0:
-                lib2 = pickle
-                lib1 = pickle
-            elif self.serialize_mode == 1:
-                lib2 = marshal
-                lib1 = pickle
-            elif self.serialize_mode == 2:
-                lib2 = marshal
-                lib1 = json
-            else:
+            serializer = serialize_modes.get(self.serialize_mode)
+            if not serializer:
                 raise NotImplementedError()
+
+            lib1 = serializer['lib1']
+            lib2 = serializer['lib2']
+
             lib2.dump(
                 (lib1.dumps(self.root), self.code_length, self.array_codes),
                 fcompressed)
             fcompressed.close()
+            raw_size = os.stat(self.filename).st_size if self.filename else len(self.long_str)
+            encoded_size = os.stat(filename).st_size
+            print('Закодировано ({}), сжатие={}'.format(
+                serialize_modes.get(self.serialize_mode),
+                encoded_size / raw_size)
+            )
         else:
-            print("Please set long_str.")
+            print("Пожалуйста выберите long_str.")
