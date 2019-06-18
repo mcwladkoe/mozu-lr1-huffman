@@ -1,3 +1,4 @@
+# NAME: Samotoy Vladyslav, 8.04.122.010.18.02.
 from collections import defaultdict
 from .model import H
 MAX_BITS = 8
@@ -31,7 +32,6 @@ def build_tree(nodes):
 
 def get_frequency_table(long_str):
     ftable = defaultdict(int)
-    print(type(long_str))
     for c in long_str:
         ftable[c] += 1
     return ftable
@@ -39,7 +39,7 @@ def get_frequency_table(long_str):
 
 def generate_huffman_code(node, dict_codes, tmp=None):
     if not node.L and not node.R:
-        dict_codes[node.C] = ''.join(tmp)
+        dict_codes[node.C] = ''.join(tmp or '')
         return
     tmp = tmp or []
     tmp.append('0')

@@ -1,3 +1,4 @@
+# NAME: Samotoy Vladyslav, 8.04.122.010.18.02.
 from setuptools import setup, find_packages
 
 setup(

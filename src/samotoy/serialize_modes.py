@@ -1,3 +1,4 @@
+# NAME: Samotoy Vladyslav, 8.04.122.010.18.02.
 import marshal
 import pickle
 from .model import HSerializer
