@@ -164,6 +164,7 @@ class Main:
                 self.filename or 'temp'
             )
             enc.write(out_filename)
+            enc.root.recursive_print()
             dec = Decoder(
                 filename=out_filename,
                 encode_mode=self.choise2,

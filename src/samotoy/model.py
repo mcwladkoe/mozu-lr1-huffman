@@ -65,6 +65,23 @@ class H:
         """Property for print."""
         return self.C or '???'
 
+    def recursive_print(self, depth=0, tmp=None):
+        tmp = tmp or []
+        st = '|' * depth
+        st += '-' + (self.C or '')
+        if tmp:
+            st += '({})'.format(''.join(tmp))
+        print(st)
+        depth += 1
+        if self.L:
+            tmp.append('0')
+            self.L.recursive_print(depth, tmp)
+            tmp.pop()
+        if self.R:
+            tmp.append('1')
+            self.R.recursive_print(depth, tmp)
+            tmp.pop()
+
 
 class HSerializer:
     """Serializer for HuffmanNode(H) class as list."""
