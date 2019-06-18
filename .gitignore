@@ -2,4 +2,4 @@ env/
 
 *.mcwladkoe
 __pycache__
-
+*.egg-info

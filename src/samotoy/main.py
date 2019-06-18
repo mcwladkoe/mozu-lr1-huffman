@@ -164,30 +164,30 @@ class Main:
                 self.filename or 'temp'
             )
             enc.write(out_filename)
-            # dec = Decoder(
-            #     filename=out_filename,
-            #     encode_mode=self.choise2,
-            #     serialize_mode=self.choise3
-            # )
-            # out2_filename = '{}_decoded.mcwladkoe'.format(
-            #     self.filename or 'temp'
-            # )
-            # dec.decode_as(out2_filename)
-            # self.choise3 = None
-            # self.choise2 = None
-            # self.choise1 = None
-            # self.menu1()
+            dec = Decoder(
+                filename=out_filename,
+                encode_mode=self.choise2,
+                serialize_mode=self.choise3
+            )
+            out2_filename = '{}_decoded.mcwladkoe'.format(
+                self.filename or 'temp'
+            )
+            dec.decode_as(out2_filename)
+            self.choise3 = None
+            self.choise2 = None
+            self.choise1 = None
+            self.menu1()
 
 
 def main():
-    file = []
-    for root, _, files in os.walk("ТЕСТОВЫЕ ФАЙЛЫ", topdown=False):
-        for name in files:
-            file.append(os.path.join(os.path.join(root, name)))
-    for i in file:
-        print(i)
-        Main(filename=os.path.join('/home/vlads/Projects/mozu-lr1-huffman', i))
-    # Main()
+    # file = []
+    # for root, _, files in os.walk("ТЕСТОВЫЕ ФАЙЛЫ", topdown=False):
+    #     for name in files:
+    #         file.append(os.path.join(os.path.join(root, name)))
+    # for i in file:
+    #     print(i)
+    #     Main(filename=os.path.join('/home/vlads/Projects/mozu-lr1-huffman', i))
+    Main()
 
 if __name__ == '__main__':
     main()
