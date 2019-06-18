@@ -73,9 +73,9 @@ class Main:
             except ValueError:
                 print("Неверный мод")
                 continue
-            if menu1 not in menu1:
+            if self.choise1 not in menu1:
                 print("Неверный мод")
-            elif menu1 == 0:
+            elif self.choise1 == 0:
                 sys.exit(0)
 
         if self.choise1 == 2:
