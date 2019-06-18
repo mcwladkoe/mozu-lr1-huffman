@@ -130,16 +130,20 @@ class Encoder:
                     (lib1.dumps(self.root), self.code_length, self.array_codes),
                     f)
             if self.filename:
-                raw_size = os.stat(self.filename).st_size
+                self.raw_size = os.stat(self.filename).st_size
             else:
-                raw_size = len(self.long_str)
-            encoded_size = os.stat(filename).st_size
+                self.raw_size = len(self.long_str)
+            self.encoded_size = os.stat(filename).st_size
             print('Закодировано ({}), сжатие={}'.format(
                 serialize_modes.get(self.serialize_mode)['description'],
-                encoded_size / raw_size)
+                self.encoded_size / self.raw_size)
             )
-            print(raw_size)
-            print(encoded_size)
         else:
             print("Пожалуйста выберите long_str.")
             raise NotImplementedError()
+
+    def get_meta(self):
+        return {
+            'raw': self.raw_size,
+            self.serialize_mode: self.encoded_size
+        }

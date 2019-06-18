@@ -8,7 +8,10 @@ from .encoder import Encoder
 from .decoder import Decoder
 from .menu_strings import menu1, menu2, menu3
 from .serialize_modes import serialize_modes_extended, serialize_modes
+from collections import defaultdict
 
+
+GLOBAL_META = defaultdict(dict)
 
 class Main:
     """Main class."""
@@ -19,8 +22,6 @@ class Main:
         Keyword arguments:
         args -- arguments object (default: sys.argv)
         """
-        print(args)
-        print(filename)
         self.long_str = None
         self.filename = None
         description = """\
@@ -143,16 +144,17 @@ class Main:
                     i
                 )
                 enc.write(out_filename)
-                dec = Decoder(
-                    filename=out_filename,
-                    encode_mode=self.choise2,
-                    serialize_mode=i
-                )
-                out2_filename = '{}_decoded_{}.mcwladkoe'.format(
-                    self.filename or 'temp',
-                    i
-                )
-                dec.decode_as(out2_filename)
+                GLOBAL_META[self.filename].update(enc.get_meta())
+                # dec = Decoder(
+                #     filename=out_filename,
+                #     encode_mode=self.choise2,
+                #     serialize_mode=i
+                # )
+                # out2_filename = '{}_decoded_{}.mcwladkoe'.format(
+                #     self.filename or 'temp',
+                #     i
+                # )
+                # dec.decode_as(out2_filename)
         else:
             enc = Encoder(
                 filename=self.filename,
@@ -164,6 +166,7 @@ class Main:
                 self.filename or 'temp'
             )
             enc.write(out_filename)
+            GLOBAL_META[self.filename] = enc.get_meta()
             # dec = Decoder(
             #     filename=out_filename,
             #     encode_mode=self.choise2,
@@ -185,8 +188,8 @@ def main():
         for name in files:
             file.append(os.path.join(os.path.join(root, name)))
     for i in file:
-        print(i)
         Main(filename=os.path.join('/home/vlads/Projects/mozu-lr1-huffman', i))
+    print(GLOBAL_META)
     # Main()
 
 if __name__ == '__main__':
